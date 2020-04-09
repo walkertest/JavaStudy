@@ -1,4 +1,4 @@
-package com.tencent.concurrent;
+package com.tencent.concurrent.Collection;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,7 +21,7 @@ import java.util.concurrent.Executors;
  74
  74
  77
- 21:38:25.018 [main] INFO com.tencent.concurrent.HashmapTest - key:0 value is null
+ 21:38:25.018 [main] INFO com.tencent.concurrent.Collection.HashmapTest - key:0 value is null
  test end.
  */
 @Slf4j
