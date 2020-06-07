@@ -10,6 +10,9 @@ public class Student {
     private String gender;
     private int age;
 
+    public Student() {
+    }
+
     public Student(long id, String name, String gender, int age) {
         this.id = id;
         this.name = name;

@@ -10,6 +10,10 @@ public class ClassRoom {
     private String className;
     private List<Student> students;
 
+
+    public ClassRoom() {
+    }
+
     public ClassRoom(long id, String className, List<Student> students) {
         this.id = id;
         this.className = className;

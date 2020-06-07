@@ -17,7 +17,6 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 复现fastjson的安全问题
  * fastjson的常见用法
  * fastjson平滑迁移到gson,参考：https://juejin.im/post/5e6b9278e51d4526c3591666
  * gson封装static方法有无线程安全问题.
@@ -33,6 +32,10 @@ public class JsonTest {
         Gson gson = new Gson();
         String studentJson2 = gson.toJson(s1);
         System.out.println(studentJson2);
+
+        //代理类，兼容fastjson用法.
+        String studentJson3 = com.tencent.util.JSON.toJSONString(s1);
+        System.out.println(studentJson3);
     }
 
     @Test
@@ -43,8 +46,11 @@ public class JsonTest {
         Gson gson = new Gson();
         Student student1 = gson.fromJson(json, Student.class);
 
+        Student student2 = com.tencent.util.JSON.parseObject(json, Student.class);
+
         System.out.println(student);
         System.out.println(student1);
+        System.out.println(student2);
     }
 
     @Test
@@ -60,13 +66,17 @@ public class JsonTest {
         System.out.println(classRoomJson);
         System.out.println(classRoom1);
 
-
-
         Gson gson = new Gson();
         String classRoomJson2 = gson.toJson(classRoom); // 将嵌套对象转成 JSON
         ClassRoom classRoom2 = gson.fromJson(classRoomJson2, ClassRoom.class); // 将 JSON 转成嵌套对象
         System.out.println(classRoomJson2);
         System.out.println(classRoom2);
+
+
+        String classRoomJson3 = com.tencent.util.JSON.toJSONString(classRoom);
+        ClassRoom classRoom3 = com.tencent.util.JSON.parseObject(classRoomJson3, ClassRoom.class);
+        System.out.println(classRoomJson3);
+        System.out.println(classRoom3);
     }
 
 
@@ -86,6 +96,13 @@ public class JsonTest {
         Integer score2 = jsonObject1.get("score").getAsInt(); // 99
         System.out.println(name2);
         System.out.println(score2);
+
+        //
+        JsonObject jsonObject2 = com.tencent.util.JSON.parseObject(json);
+        String name3 = jsonObject2.get("name").getAsString(); // 小明
+        Integer score3 = jsonObject2.get("score").getAsInt(); // 99
+        System.out.println(name3);
+        System.out.println(score3);
     }
 
     @Test
@@ -107,6 +124,13 @@ public class JsonTest {
         System.out.println(name0_2);
         System.out.println(name1_2);
 
+        //
+        JsonArray jsonArray3 = com.tencent.util.JSON.parseArray(json);
+        String name0_3 = jsonArray3.get(0).getAsJsonObject().get("name").getAsString(); // 小明
+        String name1_3 = jsonArray3.get(1).getAsJsonObject().get("name").getAsString(); // 小芳
+        System.out.println(name0_3);
+        System.out.println(name1_3);
+
     }
 
     @Test
@@ -122,14 +146,22 @@ public class JsonTest {
         System.out.println(json);
         System.out.println(studentsRet);
 
-
         Gson gson = new Gson();
         Type type2 = new TypeToken<List<Student>>() {}.getType(); // 获取泛型类型
 
         String json2 = gson.toJson(students);
-        List<Student> studentsRet2 = gson.fromJson(json, type2);
+        List<Student> studentsRet2 = gson.fromJson(json2, type2);
         System.out.println(json2);
         System.out.println(studentsRet2);
+
+
+        //
+        String json3 = com.tencent.util.JSON.toJSONString(students);
+        List<Student> studentsRet3 =  com.tencent.util.JSON.parseObject(json3,type2);
+        System.out.println(json3);
+        System.out.println(studentsRet3);
+
+
 
 
     }
