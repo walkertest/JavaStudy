@@ -12,6 +12,9 @@ import java.io.IOException;
  *  fastjson漏洞复现：https://mntn0x.github.io/2020/04/07/Fastjson%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/
  *  找出hashcode对应的黑名单类:https://github.com/LeadroyaL/fastjson-blacklist
  *  fastjson的安全问题复现.
+ *  fastjson的黑名单commit：https://github.com/alibaba/fastjson/commit/1e1239eb5f4c2052dbc097d2c4e619ebc6e5cc28
+ *  jackson的多态的反序列化类似实现：https://github.com/FasterXML/jackson-docs/wiki/JacksonPolymorphicDeserialization
+ *
  * Created by walker on 2020/6/7.
  */
 public class FastJsonSafePoc {
