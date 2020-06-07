@@ -1,7 +1,10 @@
 package com.tencent.model;
 
+import lombok.Data;
+
 import java.util.List;
 
+@Data
 public class ClassRoom {
     private long id;
     private String className;
