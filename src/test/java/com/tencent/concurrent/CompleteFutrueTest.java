@@ -123,7 +123,7 @@ public class CompleteFutrueTest {
             String threadName = Thread.currentThread().getName();
             System.out.println("thread:" + threadName);
             try {
-                Thread.sleep(10_000);
+                Thread.sleep(2_000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -137,8 +137,9 @@ public class CompleteFutrueTest {
         });
 
         System.out.println("begin to get future.thread:" + Thread.currentThread().getName());
-        Object result = future.get();
-        System.out.println("result:"+ result);
+//        Object result = future.get();
+//        System.out.println("result:"+ result);
+        Thread.sleep(3_000);
     }
 
 
@@ -218,6 +219,11 @@ public class CompleteFutrueTest {
 
         CompletableFuture<Integer> result = completableFuture.thenCombine(completableFuture2, (x, y) -> x + y);
         System.out.println(result.get());
+    }
+
+    @Test
+    public void testWhenComplete() {
+
     }
 
 }
