@@ -44,7 +44,7 @@ public class JSON {
     }
 
     public static <T> List<T> parseArray(final String str, Class<T> clazz) {
-        Type type2 = new TypeToken<List<T>>() {}.getType(); // 获取泛型类型
+        Type type2 = TypeToken.getParameterized(List.class,clazz).getType(); // 获取泛型类型
         return gson.fromJson(str, type2);
     }
 

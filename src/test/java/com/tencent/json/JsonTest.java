@@ -9,19 +9,20 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.tencent.model.ClassRoom;
-import com.tencent.model.Student;
+import com.tencent.model.*;
 import com.tencent.util.JsonObjectUtil;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * fastjson的常见用法
  * fastjson平滑迁移到gson,参考：https://juejin.im/post/5e6b9278e51d4526c3591666
  * gson封装static方法有无线程安全问题.
+ * fastjson和gson的对比：https://yq.aliyun.com/articles/694560
  */
 public class JsonTest {
 
@@ -87,7 +88,7 @@ public class JsonTest {
 
     @Test
     public void jsonStringToJSONObj() {
-        String json = "{\"age\":18, \"grade\": \"六年级\", \"name\": \"小明\", \"score\": 99,\"naMe\": \"小明1\"}";
+        String json = "{\"age\":18, \"grade\": \"六年级\", \"name\": \"小明\", \"score\": 99,\"naMe\": \"小明1\",}";
         JSONObject jsonObject = JSON.parseObject(json);
         System.out.println(jsonObject);
 
@@ -122,6 +123,19 @@ public class JsonTest {
     public void jsonStringToJsonArray() {
         String json = "[{\"age\":18, \"grade\": \"六年级\", \"name\": \"小明\", \"score\": 99},{\"age\":18, \"grade\": \"六年级\", \"name\": \"小芳\", \"score\": 100}]";
 
+        List<JSONObject> testList = JSON.parseObject(json,List.class);
+        for(JSONObject jsonObject : testList) {
+            System.out.println(jsonObject);
+        }
+
+        Gson gson = new Gson();
+        List<JsonObject> jsonObjectList = com.tencent.util.JSON.parseArray(json,JsonObject.class);
+        for(JsonObject jsonObject : jsonObjectList) {
+            System.out.println(jsonObject);
+        }
+
+
+
         JSONArray jsonArray = JSON.parseArray(json);
 
         String name0_1 = jsonArray.getJSONObject(0).getString("name"); // 小明
@@ -129,7 +143,7 @@ public class JsonTest {
         System.out.println(name0_1);
         System.out.println(name1_1);
 
-        Gson gson = new Gson();
+
 
         JsonArray jsonArray2 = gson.fromJson(json, JsonArray.class);
         String name0_2 = jsonArray2.get(0).getAsJsonObject().get("name").getAsString(); // 小明
@@ -194,6 +208,51 @@ public class JsonTest {
         boolean value2 = jsonObject.getBooleanValue("test");
         System.out.println(value);
         System.out.println(value2);
+    }
+
+
+    @Test
+    public void testGsonToJackson() throws IOException {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("test","test");
+        List<JsonObject> jsonObjectList = new ArrayList<>();
+        jsonObjectList.add(jsonObject);
+        JsonObjectResp jsonObjectResp = new JsonObjectResp();
+        jsonObjectResp.setList(jsonObjectList);
+
+
+
+        ObjectMapper mapper = new ObjectMapper();
+        String json=mapper.writeValueAsString(jsonObjectResp);
+        System.out.println(json);
+    }
+
+    @Test
+    public void testFastJsonToJackson() throws IOException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("test","test");
+        List<JSONObject> jsonObjectList = new ArrayList<>();
+        jsonObjectList.add(jsonObject);
+
+        FastJSONObjectResp fastJSONObjectResp = new FastJSONObjectResp();
+        fastJSONObjectResp.setList(jsonObjectList);
+        ObjectMapper mapper = new ObjectMapper();
+        String json=mapper.writeValueAsString(fastJSONObjectResp);
+        System.out.println(json);
+
+    }
+
+    @Test
+    public void testMapToJackson() throws IOException {
+        Map<String,Object> map = new HashMap<>();
+        map.put("test", "test");
+        List<Map<String,Object>> list = new ArrayList<>();
+        list.add(map);
+        JsonMapResp jsonMapResp = new JsonMapResp();
+        jsonMapResp.setList(list);
+        ObjectMapper mapper = new ObjectMapper();
+        String json=mapper.writeValueAsString(jsonMapResp);
+        System.out.println(json);
     }
 
 
