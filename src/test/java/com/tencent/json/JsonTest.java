@@ -11,7 +11,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.tencent.model.*;
 import com.tencent.util.JsonObjectUtil;
+import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.util.JSONPObject;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -215,27 +217,36 @@ public class JsonTest {
     public void testGsonToJackson() throws IOException {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("test","test");
-        List<JsonObject> jsonObjectList = new ArrayList<>();
-        jsonObjectList.add(jsonObject);
-        JsonObjectResp jsonObjectResp = new JsonObjectResp();
-        jsonObjectResp.setList(jsonObjectList);
 
+        String json2 = com.tencent.util.JSON.toJSONString(jsonObject);
+        System.out.println(json2);
+//        List<JsonObject> jsonObjectList = new ArrayList<>();
+//        jsonObjectList.add(jsonObject);
+
+        JsonObjectResp jsonObjectResp = new JsonObjectResp();
+        jsonObjectResp.setJsonObject(jsonObject);
 
 
         ObjectMapper mapper = new ObjectMapper();
         String json=mapper.writeValueAsString(jsonObjectResp);
         System.out.println(json);
+
+
+        JsonNode jsonNode = mapper.readTree(json2);
+        System.out.println(jsonNode);
+        String value = jsonNode.get("test").asText();
+        System.out.println(value);
     }
 
     @Test
     public void testFastJsonToJackson() throws IOException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("test","test");
-        List<JSONObject> jsonObjectList = new ArrayList<>();
-        jsonObjectList.add(jsonObject);
+//        List<JSONObject> jsonObjectList = new ArrayList<>();
+//        jsonObjectList.add(jsonObject);
 
         FastJSONObjectResp fastJSONObjectResp = new FastJSONObjectResp();
-        fastJSONObjectResp.setList(jsonObjectList);
+        fastJSONObjectResp.setList(jsonObject);
         ObjectMapper mapper = new ObjectMapper();
         String json=mapper.writeValueAsString(fastJSONObjectResp);
         System.out.println(json);

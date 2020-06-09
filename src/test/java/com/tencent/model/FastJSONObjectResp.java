@@ -8,5 +8,5 @@ import java.util.List;
 
 @Data
 public class FastJSONObjectResp {
-    List<JSONObject> list;
+    JSONObject list;
 }
