@@ -1,14 +1,19 @@
 package com.tencent.model;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
 @Data
 public class Student {
 
-    private long id;
+    private transient long id;
     private String name;
     private String gender;
     private int age;
+
+    @SerializedName(value="resultcode", alternate = {"resultCode"})
+    private String resultcode;   //大小写测试.
 
     public Student() {
     }

@@ -5,11 +5,13 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.tencent.model.ClassRoom;
 import com.tencent.model.Student;
+import com.tencent.util.JsonObjectUtil;
 import org.junit.Test;
 
 import java.lang.reflect.Type;
@@ -29,7 +31,10 @@ public class JsonTest {
         String studentJson = JSON.toJSONString(s1);
         System.out.println(studentJson);
 
-        Gson gson = new Gson();
+
+        GsonBuilder builder = new GsonBuilder();
+//        builder.excludeFieldsWithoutExposeAnnotation();
+        Gson gson = builder.create();
         String studentJson2 = gson.toJson(s1);
         System.out.println(studentJson2);
 
@@ -40,7 +45,7 @@ public class JsonTest {
 
     @Test
     public void jsonStringToJavaBean() {
-        String json = "{\"age\":12,\"gender\":\"男\",\"id\":1,\"name\":\"小明\"}";
+        String json = "{\"age\":12,\"gender\":\"男\",\"id\":1,\"name\":\"小明\",\"resultCode\":\"10300\"}";
         Student student = JSON.parseObject(json, Student.class);
 
         Gson gson = new Gson();
@@ -82,18 +87,26 @@ public class JsonTest {
 
     @Test
     public void jsonStringToJSONObj() {
-        String json = "{\"age\":18, \"grade\": \"六年级\", \"name\": \"小明\", \"score\": 99}";
+        String json = "{\"age\":18, \"grade\": \"六年级\", \"name\": \"小明\", \"score\": 99,\"naMe\": \"小明1\"}";
         JSONObject jsonObject = JSON.parseObject(json);
+        System.out.println(jsonObject);
+
+        Student student = JSON.parseObject(json,Student.class);
+        System.out.println(student);
 
         String name = jsonObject.getString("name");  // 小明
+        String nameFastJson = jsonObject.getString("name1");  // 小明
         Integer score  = jsonObject.getInteger("score"); // 99
         System.out.println(name);
+        System.out.println("nameFastJson:" + nameFastJson);
         System.out.println(score);
 
         Gson gson = new Gson();
         JsonObject jsonObject1 = gson.fromJson(json, JsonObject.class);
         String name2 = jsonObject1.get("name").getAsString(); // 小明
         Integer score2 = jsonObject1.get("score").getAsInt(); // 99
+        String nameTest = JsonObjectUtil.getString(jsonObject1,"name1");
+        System.out.println("nameTest:" + nameTest);
         System.out.println(name2);
         System.out.println(score2);
 
@@ -106,7 +119,7 @@ public class JsonTest {
     }
 
     @Test
-    public void jsonStringToJsonString() {
+    public void jsonStringToJsonArray() {
         String json = "[{\"age\":18, \"grade\": \"六年级\", \"name\": \"小明\", \"score\": 99},{\"age\":18, \"grade\": \"六年级\", \"name\": \"小芳\", \"score\": 100}]";
 
         JSONArray jsonArray = JSON.parseArray(json);
@@ -131,7 +144,15 @@ public class JsonTest {
         System.out.println(name0_3);
         System.out.println(name1_3);
 
+
+        List<Student> studentList = com.tencent.util.JSON.parseArray(json,Student.class);
+        System.out.println(studentList);
+        for(Student student: studentList) {
+            System.out.println(student);
+        }
+
     }
+
 
     @Test
     public void typeReferance() {
@@ -164,6 +185,15 @@ public class JsonTest {
 
 
 
+    }
+
+    @Test
+    public void testGetBoolean() {
+        JSONObject jsonObject = new JSONObject();
+        Boolean value = jsonObject.getBoolean("test");
+        boolean value2 = jsonObject.getBooleanValue("test");
+        System.out.println(value);
+        System.out.println(value2);
     }
 
 

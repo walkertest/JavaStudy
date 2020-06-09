@@ -4,9 +4,11 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import org.junit.Test;
 
 import java.lang.reflect.Type;
+import java.util.List;
 
 public class JSON {
 
@@ -39,6 +41,11 @@ public class JSON {
 
     public static JsonArray parseArray(final String str) {
         return gson.fromJson(str, JsonArray.class);
+    }
+
+    public static <T> List<T> parseArray(final String str, Class<T> clazz) {
+        Type type2 = new TypeToken<List<T>>() {}.getType(); // 获取泛型类型
+        return gson.fromJson(str, type2);
     }
 
     public static  <T> T parseObject(final String str, Type type) {
