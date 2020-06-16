@@ -1,19 +1,15 @@
 package com.tencent.json;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.alibaba.fastjson.*;
+import com.alibaba.fastjson.parser.ParserConfig;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import com.tencent.model.*;
 import com.tencent.util.JsonObjectUtil;
+import lombok.Data;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.util.JSONPObject;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -44,6 +40,12 @@ public class JsonTest {
         //代理类，兼容fastjson用法.
         String studentJson3 = com.tencent.util.JSON.toJSONString(s1);
         System.out.println(studentJson3);
+
+        JsonObject jo = new JsonObject();
+        jo.addProperty("topic", "test");
+        jo.addProperty("json", "jsonContent");
+        String content = com.tencent.util.JSON.toJSONString(jo);
+        System.out.println(content);
     }
 
     @Test
@@ -169,6 +171,38 @@ public class JsonTest {
 
     }
 
+    @Test
+    public void testJsonArrayToString() {
+        Map<String, Object> map = new HashMap<>();
+
+        map.put("uid", 12345);
+        map.put("upgradeType", 2);
+        map.put("appId", "1000");
+        JSONArray jsonArray = new JSONArray();
+        jsonArray.add(map);
+        String json = JSON.toJSONString(jsonArray);
+        System.out.println(json);
+
+        List<Map<String,Object>> list = new ArrayList<>();
+        list.add(map);
+        String json2 = com.tencent.util.JSON.toJSONString(list);
+        System.out.println(json2);
+
+
+        List<Map<String,Object>> list2 = com.tencent.util.JSON.parseObject(json2, new TypeToken<List<Map<String,Object>>>(){}.getType());
+        System.out.println(list2);
+        for(Map<String,Object> map1 : list2) {
+            System.out.println(map1);
+        }
+
+//        JsonArray jsonArray1 = new JsonArray();
+//        JsonObject jsonElement = new JsonObject();
+//        jsonElement.
+//        jsonArray1.add((JsonElement) map);
+//        String json3 = JSON.toJSONString(jsonArray1);
+//        System.out.println(json3);
+    }
+
 
     @Test
     public void typeReferance() {
@@ -265,6 +299,70 @@ public class JsonTest {
         String json=mapper.writeValueAsString(jsonMapResp);
         System.out.println(json);
     }
+
+
+    /**
+     * jackson的多态参考：https://medium.com/@david.truong510/jackson-polymorphic-deserialization-91426e39b96a
+     * autotype的多态使用.
+     * todo--debug看看反序列化的流程
+     * @throws Exception
+     */
+    @Test
+    public void testAutoTypeUsage() throws Exception {
+        test_0();
+
+    }
+
+    public void test_0() throws Exception {
+
+        Car car = new Car();
+        car.setCar("test");
+        car.setData("test");
+
+        Vehicle vehicle = car;
+        System.out.println(vehicle);
+
+        String json = JSON.toJSONString(vehicle, SerializerFeature.WriteClassName);
+        System.out.println(json);
+//        System.out.println(car);
+
+//        ParserConfig config = new ParserConfig();
+//        config.isAutoTypeSupport();
+        String value = "{\"@type\":\"com.tencent.model.Vehicle\",\"data\":\"test\",\"car\":\"test\"}";
+        Vehicle model1 = JSON.parseObject(value, Vehicle.class);
+        System.out.println(model1);
+        System.out.println(model1.getClass());
+
+
+        String valueV2 = "{\"@type\":\"com.tencent.model.Car\",\"data\":\"test\",\"plane\":\"test\"}";
+        Vehicle model2 = JSON.parseObject(valueV2, Vehicle.class);
+        System.out.println(model2);
+        System.out.println(model2.getClass());
+
+//        Exception error = null;
+//        try {
+//            Vehicle model2 = JSON.parseObject("{\"value\":{\"@type\":\"com.tencent.json.JsonTest$X1\"}}", Vehicle.class, config);
+//            System.out.println(model2);
+//        } catch (JSONException x) {
+//            error = x;
+//        }
+    }
+
+//    @Data
+//    public static class Vehicle {
+//        private String data;
+//    }
+//
+//    @Data
+//    public static class Car  extends Vehicle {
+//        private String sunRoof;
+//    }
+//
+//    @Data
+//    public class Plane extends Vehicle {
+//        private double wingspan;
+//    }
+
 
 
 }
