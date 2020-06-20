@@ -316,36 +316,32 @@ public class JsonTest {
     public void test_0() throws Exception {
 
         Car car = new Car();
-        car.setCar("test");
-        car.setData("test");
+        car.setCar("car");
+        car.setData("carData");
+        System.out.println("car:"+ car);
+        String carJson = JSON.toJSONString(car, SerializerFeature.WriteClassName);
+        System.out.println("carJson:"+carJson);
 
-        Vehicle vehicle = car;
-        System.out.println(vehicle);
+        Plane plane = new Plane();
+        plane.setPlane("plane");
+        plane.setData("planeData");
+        System.out.println("plane:" + plane);
+        String planeJson = JSON.toJSONString(plane,SerializerFeature.WriteClassName);
+        System.out.println("planeJson:" + planeJson);
 
-        String json = JSON.toJSONString(vehicle, SerializerFeature.WriteClassName);
-        System.out.println(json);
-//        System.out.println(car);
 
-//        ParserConfig config = new ParserConfig();
-//        config.isAutoTypeSupport();
-        String value = "{\"@type\":\"com.tencent.model.Vehicle\",\"data\":\"test\",\"car\":\"test\"}";
-        Vehicle model1 = JSON.parseObject(value, Vehicle.class);
-        System.out.println(model1);
+
+        //---------------------反序列化
+        System.out.println("-----------反序列化---------------");
+        Vehicle model1 =  JSON.parseObject(carJson, Vehicle.class);
+        System.out.println("model1:" + model1);
         System.out.println(model1.getClass());
 
-
-        String valueV2 = "{\"@type\":\"com.tencent.model.Car\",\"data\":\"test\",\"plane\":\"test\"}";
+        String valueV2 = "{\"@type\":\"com.tencent.model.Plane\",\"data\":\"test\",\"plane\":\"test\"}";
         Vehicle model2 = JSON.parseObject(valueV2, Vehicle.class);
-        System.out.println(model2);
+        System.out.println("model2:"+model2);
         System.out.println(model2.getClass());
 
-//        Exception error = null;
-//        try {
-//            Vehicle model2 = JSON.parseObject("{\"value\":{\"@type\":\"com.tencent.json.JsonTest$X1\"}}", Vehicle.class, config);
-//            System.out.println(model2);
-//        } catch (JSONException x) {
-//            error = x;
-//        }
     }
 
 //    @Data

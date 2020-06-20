@@ -8,7 +8,8 @@ import java.io.IOException;
 
 /**
  *  复现fastjson的安全问题：http://www.machengyu.net/tech/2020/03/01/fastjson-rce.html
- *  json解析安全分析：https://github.com/shengqi158/fastjson-remote-code-execute-poc/blob/master/Java_JSON%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E4%B9%8B%E6%AE%87_%E7%9C%8B%E9%9B%AA%E5%AE%89%E5%85%A8%E5%BC%80%E5%8F%91%E8%80%85%E5%B3%B0%E4%BC%9A.pdf
+ *  json解析安全分析：
+ *  https://github.com/shengqi158/fastjson-remote-code-execute-poc/blob/master/Java_JSON%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E4%B9%8B%E6%AE%87_%E7%9C%8B%E9%9B%AA%E5%AE%89%E5%85%A8%E5%BC%80%E5%8F%91%E8%80%85%E5%B3%B0%E4%BC%9A.pdf
  *  fastjson漏洞复现：https://mntn0x.github.io/2020/04/07/Fastjson%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/
  *  找出hashcode对应的黑名单类:https://github.com/LeadroyaL/fastjson-blacklist
  *  fastjson的安全问题复现.
@@ -21,6 +22,7 @@ public class FastJsonSafePoc {
 
     /**
      * 可以在https://www.hitoy.org/tool/file_base64.php 这里获取字节码文件的base64编码.
+     * 字节码@see poc_1.java
      * @throws IOException
      */
     @Test
