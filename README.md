@@ -1,6 +1,7 @@
 # JavaStudy
 * java的一些实战case的demo，见源码部分
-* 一些常见知识点，见resources的文档部分
+* 一些常见知识点，见resources的文档部分，理论部分可以参考：https://github.com/Snailclimb/JavaGuide
+* https://github.com/javagrowing/JGrowing
 
 
 ## java并发性测试
@@ -23,5 +24,3 @@
 
 
 
-## 参考
-* https://github.com/javagrowing/JGrowing
