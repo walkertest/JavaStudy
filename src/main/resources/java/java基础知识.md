@@ -55,7 +55,19 @@ java只有值传递. 引用参数，传递的是引用对象的内存地址；
 todo
 
 
+## 引用
+参考：https://blog.csdn.net/hohoo1990/article/details/106356145
+### 强引用
+Object a = new Object(); 即为强引用.
 
+### 软引用
+可以是在排除过期数据的情况下。JDK中有个类叫ResourceBundle，内部会使用ConcurrentMap缓存ResourceBundle对象，这里就是使用的软引用机制。
+
+### 弱引用
+个人理解，是在较为复杂的数据结构中，为了避免内存泄露而使用的一种引用方式；
+
+### 虚引用
+虚引用有一个很重要的用途就是用来做堆外内存的释放，DirectByteBuffer就是通过虚引用来实现堆外内存的释放；
 
 
 
