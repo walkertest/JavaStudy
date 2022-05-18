@@ -221,9 +221,63 @@ public class CompleteFutrueTest {
         System.out.println(result.get());
     }
 
+    /**
+     * 测试whenCompleteOrder
+     */
     @Test
     public void testWhenComplete() {
+        System.out.println("My tests ...");
+        CompletableFuture<String> futureString = new CompletableFuture<String>();
+        futureString.whenComplete((s,e)->System.out.println("one " + s));
+        futureString.whenComplete((s,e)->System.out.println("two " + s));
+        futureString.whenComplete((s,e)->System.out.println("three " + s));
+        System.out.println("do something else; "+ futureString.isDone());
+        futureString.complete("step(s)");
+        System.out.println("Done " + futureString.isDone());
 
+    }
+
+    @Test
+    public void testOrder() {
+        CompletableFuture<Integer> ret = invoke();
+
+        //处理异常，并且更换ret值
+        CompletableFuture<Integer> ret1;
+
+        ret.whenComplete((data, error) -> {
+            if(error != null) {
+                System.out.println("whencomplete ex.");
+            } else {
+                System.out.println("write result");
+            }
+        }) ;
+
+        ret = ret.exceptionally( ex -> {
+            System.out.println("handle ex. exMsg:" + ex.getMessage() + ex);
+            //todo--other操作.
+            return 0;
+        });
+
+        //在处理结果.
+        ret.thenRun( () -> {
+            System.out.println("log.");
+        });
+
+
+    }
+
+    private CompletableFuture<Integer> invoke() {
+        CompletableFuture<Integer> ret = new CompletableFuture<>();
+        ret.completeExceptionally(new RuntimeException("testEx"));
+        return ret;
+    }
+
+    @Test
+    public void testRunMysqlLogic() {
+        CompletableFuture.supplyAsync(() -> {
+
+            return null;
+        },null);
     }
 
 }
