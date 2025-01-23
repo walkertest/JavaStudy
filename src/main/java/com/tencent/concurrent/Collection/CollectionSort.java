@@ -9,6 +9,7 @@ import java.util.*;
  *
  * 多属性排序，可以用自定义排序器中，写明比较逻辑即可.
  * 需要避免整数溢出问题，比如a-b，如果a和b都是Integer.MIN_VALUE，那么a-b会溢出，导致结果不正确.
+ * 文章分析链接：https://blog.csdn.net/weixin_42448366/article/details/145319591?sharetype=blogdetail&sharerId=145319591&sharerefer=PC&sharesource=weixin_42448366&spm=1011.2480.3001.8118
  */
 public class CollectionSort {
     public static void main(String[] args) {
