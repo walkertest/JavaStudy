@@ -22,10 +22,7 @@
 ## other
 
 # todo
-* 守护线程
-* 秒杀项目
-* 乐观锁
-* 类加载
+[see](doc/todo.md)
 
 
 
