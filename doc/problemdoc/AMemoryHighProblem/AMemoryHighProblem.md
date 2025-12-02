@@ -134,12 +134,12 @@ pmap info sort :sort -n -k 3 -r pmap1.txt -o pmap2.txt
 see the addressinfo :tail -c +$((0x00007f8eec000000+1)) /proc/${pid}/mem|head -c $((11616*1024))|strings > data10.txt
 ```
 
-[pmap1.txt](pmap1.txt)
-[pmap2.txt](pmap2.txt)
-[data10.txt](data10.txt)
+[pmap1.txt](https://github.com/walkertest/JavaStudy/blob/master/doc/problemdoc/AMemoryHighProblem/pmap1.txt)
+[pmap2.txt](https://github.com/walkertest/JavaStudy/blob/master/doc/problemdoc/AMemoryHighProblem/pmap2.txt)
+[data10.txt](https://raw.githubusercontent.com/walkertest/JavaStudy/refs/heads/master/doc/problemdoc/AMemoryHighProblem/data10.txt)
 
-![memoryinfo](logdata.png)
-![notlogcompare](notlogcompare.png)
+![memoryinfo](https://github.com/walkertest/JavaStudy/blob/master/doc/problemdoc/AMemoryHighProblem/logdata.png)
+![notlogcompare](https://github.com/walkertest/JavaStudy/blob/master/doc/problemdoc/AMemoryHighProblem/notlogcompare.png)
 
 * there are many memory info has be releated to the big log data(The log may be serval days before). So i do a version that not log big data then the memory is normal.
 * I want to know why the big data log will cause the jvm memory go high? And which area the memory go high(the log address is not in the nmt info)?
