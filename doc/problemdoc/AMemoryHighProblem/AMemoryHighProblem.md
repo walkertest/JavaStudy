@@ -1,52 +1,12 @@
-# problem
+# problem--why the big log data cause the jvm memory go high?
 ![](memory.png)
 ![](top_res.png)
 * problem: the java process is using more and more memory over time.
 * jvm argument:java -Xmx5120M -Xms5120M -XX:NewRatio=1 -XX:MetaspaceSize=512m -XX:MaxMetaspaceSize=512m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/data/log -XX:+PrintCommandLineFlags -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps -Xloggc:/data/log/gc-%t.log -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=5 -XX:GCLogFileSize=20m -XX:ErrorFile=/data/log/hs_err_%p.log -XX:+UseConcMarkSweepGC -XX:CMSInitiatingOccupancyFraction=80 -XX:+UseCMSInitiatingOccupancyOnly -XX:AutoBoxCacheMax=20000 -XX:-UseBiasedLocking -XX:NativeMemoryTracking=detail -jar /data/app/app-live-admin-service/app_live_admin_services.jar
+* jdkversion:openjdk version "1.8.0_412"
 
-* cggroup memory info:
-```declarative
-root@app-live-admin-service-prod-gzhy-idc-1283210-ml75f:~#  cat /sys/fs/cgroup/memory/memory.usage_in_bytes
-8418189312
-root@app-live-admin-service-prod-gzhy-idc-1283210-ml75f:~# cat /sys/fs/cgroup/memory/memory.limit_in_bytes
-8589934592
-root@app-live-admin-service-prod-gzhy-idc-1283210-ml75f:~# cat /sys/fs/cgroup/memory/memory.stat
-cache 99835904
-rss 8128270336
-rss_huge 0
-shmem 0
-mapped_file 2162688
-dirty 0
-writeback 5406720
-pgpgin 145263294
-pgpgout 143253713
-pgfault 1201709916
-pgmajfault 0
-inactive_anon 0
-active_anon 8128462848
-inactive_file 91987968
-active_file 6205440
-unevictable 0
-hierarchical_memory_limit 8589934592
-total_cache 99835904
-total_rss 8128270336
-total_rss_huge 0
-total_shmem 0
-total_mapped_file 2162688
-total_dirty 0
-total_writeback 5406720
-total_pgpgin 145263294
-total_pgpgout 143253713
-total_pgfault 1201709916
-total_pgmajfault 0
-total_inactive_anon 0
-total_active_anon 8128462848
-total_inactive_file 91987968
-total_active_file 6205440
-total_unevictable 0
-```
 
-* jcmd GC heap info:
+## jcmd GC heap info:
 ```declarative
 root@app-live-admin-service-prod-gzhy-idc-1283210-ml75f:~# jcmd 115 GC.heap_info
 115:
@@ -59,7 +19,7 @@ root@app-live-admin-service-prod-gzhy-idc-1283210-ml75f:~# jcmd 115 GC.heap_info
   class space    used 19486K, capacity 22194K, committed 22272K, reserved 1048576K
 ```
 
-* heap_info
+## heap_info
 ```declarative
 Attaching to process ID 115, please wait...
 Debugger attached successfully.
@@ -115,8 +75,9 @@ concurrent mark-sweep generation:
 
 ```
 
-* nmt info
+## nmt info
 [detail see](nmt.txt)
+* jcmd pid VM.native_memory detail scale=MB > nmt.txt
 ```declarative
 Native Memory Tracking:
 
@@ -163,5 +124,22 @@ Total: reserved=7532MB, committed=6442MB
 Virtual memory map:
 ```
 
-* jmap detail data(todo)
+## jmap detail data
 ![](jmap_mat.png)
+
+## pmap info
+```declarative
+pmap info：pmap -x pid > pmap1.txt
+pmap info sort :sort -n -k 3 -r pmap1.txt -o pmap2.txt
+see the addressinfo :tail -c +$((0x00007f8eec000000+1)) /proc/${pid}/mem|head -c $((11616*1024))|strings > data10.txt
+```
+
+[pmap1.txt](pmap1.txt)
+[pmap2.txt](pmap2.txt)
+[data10.txt](data10.txt)
+
+![memoryinfo](logdata.png)
+![notlogcompare](notlogcompare.png)
+
+* there are many memory info has be releated to the big log data(The log may be serval days before). So i do a version that not log big data then the memory is normal.
+* I want to know why the big data log will cause the jvm memory go high? And which area the memory go high?
