@@ -1,6 +1,6 @@
 # problem--why the big log data cause the jvm memory go high?
-![](memory.png)
-![](top_res.png)
+![](https://github.com/walkertest/JavaStudy/blob/master/doc/problemdoc/AMemoryHighProblem/memory.png)
+![](https://github.com/walkertest/JavaStudy/blob/master/doc/problemdoc/AMemoryHighProblem/top_res.png)
 * problem: the java process is using more and more memory over time.
 * jvm argument:java -Xmx5120M -Xms5120M -XX:NewRatio=1 -XX:MetaspaceSize=512m -XX:MaxMetaspaceSize=512m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/data/log -XX:+PrintCommandLineFlags -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps -Xloggc:/data/log/gc-%t.log -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=5 -XX:GCLogFileSize=20m -XX:ErrorFile=/data/log/hs_err_%p.log -XX:+UseConcMarkSweepGC -XX:CMSInitiatingOccupancyFraction=80 -XX:+UseCMSInitiatingOccupancyOnly -XX:AutoBoxCacheMax=20000 -XX:-UseBiasedLocking -XX:NativeMemoryTracking=detail -jar /data/app/app-live-admin-service/app_live_admin_services.jar
 * jdkversion:openjdk version "1.8.0_412"
@@ -76,7 +76,7 @@ concurrent mark-sweep generation:
 ```
 
 ## nmt info
-[detail see](nmt.txt)
+[detail see](https://github.com/walkertest/JavaStudy/blob/master/doc/problemdoc/AMemoryHighProblem/nmt.txt)
 * jcmd pid VM.native_memory detail scale=MB > nmt.txt
 ```declarative
 Native Memory Tracking:
@@ -125,7 +125,7 @@ Virtual memory map:
 ```
 
 ## jmap detail data
-![](jmap_mat.png)
+![](https://github.com/walkertest/JavaStudy/blob/master/doc/problemdoc/AMemoryHighProblem/jmap_mat.png)
 
 ## pmap info
 ```declarative
@@ -142,4 +142,4 @@ see the addressinfo :tail -c +$((0x00007f8eec000000+1)) /proc/${pid}/mem|head -c
 ![notlogcompare](notlogcompare.png)
 
 * there are many memory info has be releated to the big log data(The log may be serval days before). So i do a version that not log big data then the memory is normal.
-* I want to know why the big data log will cause the jvm memory go high? And which area the memory go high?
+* I want to know why the big data log will cause the jvm memory go high? And which area the memory go high(the log address is not in the nmt info)?
