@@ -4,4 +4,4 @@
 *.iml
 target
 gen
-*.data10.txt
+*data10.txt
